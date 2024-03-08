@@ -5,11 +5,17 @@ import imageRoutes from "./routes/upload.js";
 import postRoutes from "./routes/post.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import fileUpload from "express-fileupload";
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(
+  fileUpload({
+    useTempFiles: true,
+  })
+);
 
 //routes
 app.use("/", useRoutes);
