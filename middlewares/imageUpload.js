@@ -15,6 +15,10 @@ const imageUpload = async (req, res, next) => {
         removeTemp(file.tempFilePath);
         return res.status(400).json({ message: "Unsupported format!" });
       }
+      if (file.size > 1024 * 1024 * 5) {
+        removeTemp(file.tempFilePath);
+        return res.status(400).json({ message: "File size is too large!" });
+      }
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
