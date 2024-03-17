@@ -1,6 +1,6 @@
+import Post from "../models/Post.js";
 const createPost = async (req, res) => {
   try {
-    
     const post = await new Post(req.body).save();
     res.json(post);
   } catch (error) {
