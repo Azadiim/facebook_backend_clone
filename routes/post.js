@@ -1,9 +1,10 @@
 import express from "express";
-import { createPost } from "../controllers/post.js";
+import { createPost, getAllPosts } from "../controllers/post.js";
 import { userAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
 router.post("/createPost", createPost);
+router.get("/getAllPosts", userAuth, getAllPosts);
 
 export default router;

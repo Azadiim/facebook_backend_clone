@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 const userAuth = async (req, res, next) => {
   try {
-    let tmp = req.headers("Authorization");
+    let tmp = req.header("Authorization");
     console.log(tmp);
     const token = tmp ? tmp.slice(7, tmp.length) : "";
     if (!token) {
@@ -14,8 +14,6 @@ const userAuth = async (req, res, next) => {
       req.user = user;
       next();
     });
-
-    next();
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
