@@ -1,8 +1,8 @@
-import { request } from "express";
 import jwt from "jsonwebtoken";
 const userAuth = async (req, res, next) => {
   try {
-    let tmp = req.header("Authorization");
+    let tmp = req.headers("Authorization");
+    console.log(tmp);
     const token = tmp ? tmp.slice(7, tmp.length) : "";
     if (!token) {
       return res.status(400).json({ message: "Authentication failed" });
