@@ -12,6 +12,7 @@ import Code from "../models/Code.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import sendResetCode from "../helpers/emailjs.js";
+import { response } from "express";
 const register = async (req, res) => {
   try {
     const {
@@ -217,6 +218,19 @@ const changePasswords = async (req, res) => {
   }
 };
 
+const getProfile = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const profile = await User.findOne({ username }).select("-password");
+    if (!profile) {
+      return res.json({ profileExist: false });
+    }
+    res.json({ profile });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export {
   register,
   activateAccount,
@@ -226,4 +240,5 @@ export {
   sendResetPasswordCode,
   resetCodeValidations,
   changePasswords,
+  getProfile,
 };

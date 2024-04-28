@@ -8,6 +8,7 @@ import {
   sendResetPasswordCode,
   resetCodeValidations,
   changePasswords,
+  getProfile,
 } from "../controllers/user.js";
 import { userAuth } from "../middlewares/auth.js";
 
@@ -21,5 +22,6 @@ router.post("/auth", userAuth, auth);
 router.post("/sendResetPasswordCode", sendResetPasswordCode);
 router.post("/resetCodeValidations", resetCodeValidations);
 router.post("/changePasswords", changePasswords);
+router.get("/getProfile/:username",userAuth, getProfile);
 
 export default router;
