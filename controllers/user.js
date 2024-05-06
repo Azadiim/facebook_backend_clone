@@ -100,7 +100,6 @@ const activateAccount = async (req, res) => {
   try {
     const validUser = req.user.id;
     const { token } = req.body;
-    console.log(token);
     const user = await jwt.verify(token, process.env.TOKEN_SECRET);
     const check = await User.findById(user.id);
     if (validUser !== user.id) {

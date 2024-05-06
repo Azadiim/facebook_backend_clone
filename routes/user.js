@@ -22,6 +22,6 @@ router.post("/auth", userAuth, auth);
 router.post("/sendResetPasswordCode", sendResetPasswordCode);
 router.post("/resetCodeValidations", resetCodeValidations);
 router.post("/changePasswords", changePasswords);
-router.get("/getProfile/:username",userAuth, getProfile);
+router.get("/getProfile/:username", userAuth, getProfile);
 
 export default router;
