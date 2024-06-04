@@ -9,6 +9,7 @@ import {
 } from "../helpers/validation.js";
 import User from "../models/User.js";
 import Code from "../models/Code.js";
+import Post from "../models/Post.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import sendResetCode from "../helpers/emailjs.js";
@@ -221,10 +222,11 @@ const getProfile = async (req, res) => {
   try {
     const { username } = req.params;
     const profile = await User.findOne({ username }).select("-password");
+    const posts = await Post.find({ user: profile._id }).populate("user");
     if (!profile) {
       return res.json({ profileExist: false });
     }
-    res.json({ profile });
+    res.json({ ...profile.toObject(), posts });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

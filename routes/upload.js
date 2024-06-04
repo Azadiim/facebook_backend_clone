@@ -6,6 +6,6 @@ import { userAuth } from "../middlewares/auth.js";
 const router = express.Router();
 
 router.post("/uploadImages", userAuth, imageUpload, uploadImages);
-router.get("/listImages", listImages);
+router.post("/listImages",userAuth, listImages);
 
 export default router;
