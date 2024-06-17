@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
+
+const { ObjectId } = mongoose.Schema;
 
 const userSchema = mongoose.Schema(
   {
@@ -21,11 +23,11 @@ const userSchema = mongoose.Schema(
       text: true,
       unique: true,
     },
+
     email: {
       type: String,
       required: [true, "email is required"],
       trim: true,
-      unique: true,
     },
     password: {
       type: String,
@@ -35,7 +37,7 @@ const userSchema = mongoose.Schema(
       type: String,
       trim: true,
       default:
-        "https://res.cloudinary.com/dbmrpcjnf/image/upload/v1711388867/aroamiri/dafualt/default_pic_mqzjip.png",
+        "https://res.cloudinary.com/dmhcnhtng/image/upload/v1643044376/avatars/default_pic_jeaybr.png",
     },
     cover: {
       type: String,
@@ -47,21 +49,21 @@ const userSchema = mongoose.Schema(
       trim: true,
     },
     bYear: {
-      required: true,
       type: Number,
+      required: true,
       trim: true,
     },
     bMonth: {
-      required: true,
       type: Number,
+      required: true,
       trim: true,
     },
     bDay: {
-      required: true,
       type: Number,
+      required: true,
       trim: true,
     },
-    verify: {
+    verified: {
       type: Boolean,
       default: false,
     },
@@ -84,7 +86,7 @@ const userSchema = mongoose.Schema(
     search: [
       {
         user: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: ObjectId,
           ref: "User",
         },
       },
@@ -116,7 +118,7 @@ const userSchema = mongoose.Schema(
       },
       relationship: {
         type: String,
-        enum: ["Single", "Married", "In a relationship", "Complicated"],
+        enum: ["Single", "In a relationship", "Married", "Divorced"],
       },
       instagram: {
         type: String,
@@ -125,7 +127,7 @@ const userSchema = mongoose.Schema(
     savedPosts: [
       {
         post: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: ObjectId,
           ref: "Post",
         },
         savedAt: {
@@ -140,6 +142,4 @@ const userSchema = mongoose.Schema(
   }
 );
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+module.exports = mongoose.model("User", userSchema);

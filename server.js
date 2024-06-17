@@ -1,11 +1,9 @@
-import express from "express";
-import cors from "cors";
-import useRoutes from "./routes/user.js";
-import imageRoutes from "./routes/upload.js";
-import postRoutes from "./routes/post.js";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import fileUpload from "express-fileupload";
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const fileUpload = require("express-fileupload");
+const { readdirSync } = require("fs");
+const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
@@ -16,26 +14,18 @@ app.use(
     useTempFiles: true,
   })
 );
-
 //routes
-app.use("/", useRoutes);
-app.use("/", imageRoutes);
-app.use("/", postRoutes);
-const PORT = process.env.PORT || 8001;
+readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
 
-// database
+//database
 mongoose
   .connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
   })
-  .then(() => {
-    console.log("database connection established successfully");
-  })
-  .catch((err) => {
-    console.error("database connection failed", err);
-  });
+  .then(() => console.log("database connected successfully"))
+  .catch((err) => console.log("error connecting to mongodb", err));
 
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`Server in running on port ${PORT} ...`);
+  console.log(`server is running on port ${PORT}..`);
 });

@@ -1,22 +1,20 @@
-import Post from "../models/Post.js";
-const createPost = async (req, res) => {
+const Post = require("../models/Post");
+
+exports.createPost = async (req, res) => {
   try {
     const post = await new Post(req.body).save();
     res.json(post);
   } catch (error) {
-    return res.status(500).json({ message: "Invalid Authentication" });
+    return res.status(500).json({ message: error.message });
   }
 };
-
-const getAllPosts = async (req, res) => {
+exports.getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("user", "first_name last_name gender picture username")
+      .populate("user", "first_name last_name picture username gender")
       .sort({ createdAt: -1 });
-    res.status(200).json(posts);
+    res.json(posts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
-
-export { createPost, getAllPosts };

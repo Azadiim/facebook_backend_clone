@@ -1,27 +1,34 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   register,
   activateAccount,
   login,
   auth,
+  sendVerification,
   findUser,
   sendResetPasswordCode,
-  resetCodeValidations,
-  changePasswords,
+  validateResetCode,
+  changePassword,
   getProfile,
-} from "../controllers/user.js";
-import { userAuth } from "../middlewares/auth.js";
+  updateProfilePicture,
+  updateCover,
+  updateDetails,
+} = require("../controllers/user");
+const { authUser } = require("../middlwares/auth");
 
 const router = express.Router();
 
 router.post("/register", register);
-router.post("/activate", userAuth, activateAccount);
-router.post("/findUser", findUser);
+router.post("/activate", authUser, activateAccount);
 router.post("/login", login);
-router.post("/auth", userAuth, auth);
+router.post("/sendVerification", authUser, sendVerification);
+router.post("/findUser", findUser);
 router.post("/sendResetPasswordCode", sendResetPasswordCode);
-router.post("/resetCodeValidations", resetCodeValidations);
-router.post("/changePasswords", changePasswords);
-router.get("/getProfile/:username", userAuth, getProfile);
+router.post("/validateResetCode", validateResetCode);
+router.post("/changePassword", changePassword);
+router.get("/getProfile/:username", authUser, getProfile);
+router.put("/updateProfilePicture", authUser, updateProfilePicture);
+router.put("/updateCover", authUser, updateCover);
+router.put("/updateDetails", authUser, updateDetails);
 
-export default router;
+module.exports = router;

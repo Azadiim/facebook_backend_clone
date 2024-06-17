@@ -1,11 +1,11 @@
-import express from "express";
-import { uploadImages, listImages } from "../controllers/upload.js";
-import imageUpload from "../middlewares/imageUpload.js";
-import { userAuth } from "../middlewares/auth.js";
+const express = require("express");
+const { uploadImages, listImages } = require("../controllers/upload");
+const { authUser } = require("../middlwares/auth");
+const imageUpload = require("../middlwares/imageUpload");
 
 const router = express.Router();
 
-router.post("/uploadImages", userAuth, imageUpload, uploadImages);
-router.post("/listImages",userAuth, listImages);
+router.post("/uploadImages", authUser, imageUpload, uploadImages);
+router.post("/listImages", authUser, listImages);
 
-export default router;
+module.exports = router;

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const { ObjectId } = mongoose.Schema;
 
@@ -14,6 +14,4 @@ const codeSchema = new mongoose.Schema({
   },
 });
 
-const Code = mongoose.model("Code", codeSchema);
-
-export default Code;
+module.exports = mongoose.model("Code", codeSchema);

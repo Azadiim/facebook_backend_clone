@@ -1,22 +1,24 @@
-import User from "../models/User.js";
-const validateEmail = (email) => {
+const User = require("../models/User");
+
+exports.validateEmail = (email) => {
   return String(email)
     .toLowerCase()
-    .match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+    .match(/^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,12})(\.[a-z]{2,12})?$/);
 };
-
-const validateLength = (text, min, max) => {
-  if (text.length < min || text.length > max) {
+exports.validateLength = (text, min, max) => {
+  if (text.length > max || text.length < min) {
     return false;
   }
   return true;
 };
 
-const validateUserName = async (username) => {
+exports.validateUsername = async (username) => {
   let a = false;
+
   do {
-    const check = await User.findOne({ username });
+    let check = await User.findOne({ username });
     if (check) {
+      //change username
       username += (+new Date() * Math.random()).toString().substring(0, 1);
       a = true;
     } else {
@@ -25,6 +27,3 @@ const validateUserName = async (username) => {
   } while (a);
   return username;
 };
-
-export { validateEmail, validateLength, validateUserName };
-

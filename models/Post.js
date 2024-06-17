@@ -1,11 +1,12 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
+
 const { ObjectId } = mongoose.Schema;
 
 const postSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      enum: ["profilePicture", "cover", null],
+      enum: ["profilePicture", "coverPicture", null],
       default: null,
     },
     text: {
@@ -19,18 +20,31 @@ const postSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    background: { type: String },
+    background: {
+      type: String,
+    },
     comments: [
       {
-        comment: { type: String },
-        image: { type: String },
-        commentBy: { type: ObjectId, ref: "User" },
-        commentAt: { type: Date, default: new Date() },
+        comment: {
+          type: String,
+        },
+        image: {
+          type: String,
+        },
+        commentBy: {
+          type: ObjectId,
+          ref: "User",
+        },
+        commentAt: {
+          type: Date,
+          default: new Date(),
+        },
       },
     ],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-const Post = mongoose.model("Post", postSchema);
-export default Post;
+module.exports = mongoose.model("Post", postSchema);
