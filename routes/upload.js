@@ -1,11 +1,11 @@
-const express = require("express");
-const { uploadImages, listImages } = require("../controllers/upload");
-const { authUser } = require("../middlwares/auth");
-const imageUpload = require("../middlwares/imageUpload");
+import express from "express";
+import { uploadImages, listImages } from "../controllers/upload.js";
+import { authUser } from "../middlwares/auth.js";
+import { imageUpload } from "../middlwares/imageUpload.js";
 
 const router = express.Router();
 
 router.post("/uploadImages", authUser, imageUpload, uploadImages);
 router.post("/listImages", authUser, listImages);
 
-module.exports = router;
+export default router;

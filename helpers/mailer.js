@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
-const { google } = require("googleapis");
+import { google } from "googleapis";
 
 const { OAuth2 } = google.auth;
 const oauth_link = "https://developers.google.com/oauthplayground";
@@ -13,7 +13,7 @@ const auth = new OAuth2(
   oauth_link
 );
 
-exports.sendVerificationEmail = (email, name, url) => {
+const sendVerificationEmail = (email, name, url) => {
   auth.setCredentials({
     refresh_token: MAILING_REFRESH,
   });
@@ -40,7 +40,7 @@ exports.sendVerificationEmail = (email, name, url) => {
     return res;
   });
 };
-exports.sendResetCode = (email, name, code) => {
+const sendResetCode = (email, name, code) => {
   auth.setCredentials({
     refresh_token: MAILING_REFRESH,
   });
@@ -67,3 +67,5 @@ exports.sendResetCode = (email, name, code) => {
     return res;
   });
 };
+
+export { sendVerificationEmail, sendResetCode };

@@ -1,6 +1,6 @@
-const Post = require("../models/Post");
+import Post from "../models/Post.js";
 
-exports.createPost = async (req, res) => {
+const createPost = async (req, res) => {
   try {
     const post = await new Post(req.body).save();
     res.json(post);
@@ -8,7 +8,7 @@ exports.createPost = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-exports.getAllPosts = async (req, res) => {
+const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find()
       .populate("user", "first_name last_name picture username gender")
@@ -18,3 +18,5 @@ exports.getAllPosts = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export { createPost, getAllPosts };

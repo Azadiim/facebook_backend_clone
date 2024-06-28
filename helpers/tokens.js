@@ -1,7 +1,9 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
-exports.generateToken = (payload, expired) => {
+const generateToken = (payload, expired) => {
   return jwt.sign(payload, process.env.TOKEN_SECRET, {
     expiresIn: expired,
   });
 };
+
+export default generateToken;

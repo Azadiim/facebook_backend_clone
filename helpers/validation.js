@@ -1,18 +1,18 @@
-const User = require("../models/User");
+import User from "../models/User.js";
 
-exports.validateEmail = (email) => {
+const validateEmail = (email) => {
   return String(email)
     .toLowerCase()
     .match(/^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,12})(\.[a-z]{2,12})?$/);
 };
-exports.validateLength = (text, min, max) => {
+const validateLength = (text, min, max) => {
   if (text.length > max || text.length < min) {
     return false;
   }
   return true;
 };
 
-exports.validateUsername = async (username) => {
+const validateUsername = async (username) => {
   let a = false;
 
   do {
@@ -27,3 +27,5 @@ exports.validateUsername = async (username) => {
   } while (a);
   return username;
 };
+
+export { validateEmail, validateLength, validateUsername };

@@ -1,18 +1,19 @@
-const {
+import {
   validateEmail,
   validateLength,
   validateUsername,
-} = require("../helpers/validation");
-const User = require("../models/User");
-const Post = require("../models/Post");
-const Code = require("../models/Code");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const cloudinary = require("cloudinary");
-const { generateToken } = require("../helpers/tokens");
-const { sendVerificationEmail, sendResetCode } = require("../helpers/mailer");
-const generateCode = require("../helpers/generateCode");
-exports.register = async (req, res) => {
+} from "../helpers/validation.js";
+import User from "../models/User.js";
+import Post from "../models/Post.js";
+import Code from "../models/Code.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import cloudinary from "cloudinary";
+import generateToken from "../helpers/tokens.js";
+import { sendVerificationEmail, sendResetCode } from "../helpers/mailer.js";
+import generateCode from "../helpers/generateCode.js";
+
+const register = async (req, res) => {
   try {
     const {
       first_name,
@@ -91,7 +92,7 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-exports.activateAccount = async (req, res) => {
+const activateAccount = async (req, res) => {
   try {
     const validUser = req.user.id;
     const { token } = req.body;
@@ -117,7 +118,7 @@ exports.activateAccount = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -147,7 +148,7 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-exports.sendVerification = async (req, res) => {
+const sendVerification = async (req, res) => {
   try {
     const id = req.user.id;
     const user = await User.findById(id);
@@ -169,7 +170,7 @@ exports.sendVerification = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-exports.findUser = async (req, res) => {
+const findUser = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).select("-password");
@@ -187,7 +188,7 @@ exports.findUser = async (req, res) => {
   }
 };
 
-exports.sendResetPasswordCode = async (req, res) => {
+const sendResetPasswordCode = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).select("-password");
@@ -206,7 +207,7 @@ exports.sendResetPasswordCode = async (req, res) => {
   }
 };
 
-exports.validateResetCode = async (req, res) => {
+const validateResetCode = async (req, res) => {
   try {
     const { email, code } = req.body;
     const user = await User.findOne({ email });
@@ -222,7 +223,7 @@ exports.validateResetCode = async (req, res) => {
   }
 };
 
-exports.changePassword = async (req, res) => {
+const changePassword = async (req, res) => {
   const { email, password } = req.body;
 
   const cryptedPassword = await bcrypt.hash(password, 12);
@@ -235,7 +236,7 @@ exports.changePassword = async (req, res) => {
   return res.status(200).json({ message: "ok" });
 };
 
-exports.getProfile = async (req, res) => {
+const getProfile = async (req, res) => {
   try {
     const { username } = req.params;
     const profile = await User.findOne({ username }).select("-password");
@@ -251,7 +252,7 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-exports.updateProf = async (req, res) => {
+const updateProf = async (req, res) => {
   try {
     const { url } = req.body;
     const updatedProfPic = await User.findByIdAndUpdate(req.user.id, {
@@ -261,4 +262,16 @@ exports.updateProf = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+export {
+  register,
+  activateAccount,
+  login,
+  sendVerification,
+  findUser,
+  sendResetPasswordCode,
+  validateResetCode,
+  changePassword,
+  updateProf,
+  getProfile,
 };
