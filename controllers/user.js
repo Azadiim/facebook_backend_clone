@@ -231,6 +231,17 @@ const getProfile = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const updateProf = async (req, res) => {
+  try {
+    const { url } = req.body;
+    const updatedprof = await User.findByIdAndUpdate(req.user.id, {
+      picture: url,
+    });
+    res.json({ updateProf });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 export {
   register,
@@ -242,4 +253,5 @@ export {
   resetCodeValidations,
   changePasswords,
   getProfile,
+  updateProf,
 };
