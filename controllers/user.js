@@ -222,7 +222,9 @@ const getProfile = async (req, res) => {
   try {
     const { username } = req.params;
     const profile = await User.findOne({ username }).select("-password");
-    const posts = await Post.find({ user: profile._id }).populate("user");
+    const posts = await Post.find({ user: profile._id })
+      .populate("user")
+      .sort({ createdAt: -1 });
     if (!profile) {
       return res.json({ profileExist: false });
     }
