@@ -10,6 +10,7 @@ import {
   changePasswords,
   getProfile,
   updateProf,
+  updateCover,
 } from "../controllers/user.js";
 import { userAuth } from "../middlewares/auth.js";
 
@@ -25,4 +26,5 @@ router.post("/resetCodeValidations", resetCodeValidations);
 router.post("/changePasswords", changePasswords);
 router.get("/getProfile/:username", userAuth, getProfile);
 router.put("/updateProf", userAuth, updateProf);
+router.put("/updateCover", userAuth, updateCover);
 export default router;

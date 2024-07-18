@@ -244,6 +244,18 @@ const updateProf = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const updateCover = async (req, res) => {
+  try {
+    const { url } = req.body;
+    console.log(url)
+    const updatedcover = await User.findByIdAndUpdate(req.user.id, {
+      cover: url,
+    });
+    res.json({ updatedcover });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 export {
   register,
@@ -256,4 +268,5 @@ export {
   changePasswords,
   getProfile,
   updateProf,
+  updateCover,
 };
