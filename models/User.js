@@ -122,6 +122,7 @@ const userSchema = mongoose.Schema(
         type: String,
       },
     },
+
     savedPosts: [
       {
         post: {

@@ -11,6 +11,8 @@ import {
   getProfile,
   updateProf,
   updateCover,
+  updateBio,
+  getDetails,
 } from "../controllers/user.js";
 import { userAuth } from "../middlewares/auth.js";
 
@@ -27,4 +29,6 @@ router.post("/changePasswords", changePasswords);
 router.get("/getProfile/:username", userAuth, getProfile);
 router.put("/updateProf", userAuth, updateProf);
 router.put("/updateCover", userAuth, updateCover);
+router.put("/updateCover/bio", userAuth, updateBio);
+
 export default router;

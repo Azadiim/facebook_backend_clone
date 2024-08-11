@@ -193,8 +193,7 @@ const resetCodeValidations = async (req, res) => {
     const { email, code } = req.body;
     const user = await User.findOne({ email });
     const dbCode = await Code.findOne({ user: user._id });
-    console.log(dbCode.code);
-    console.log(code);
+
     if (dbCode.code !== code) {
       return res.status(400).json({ message: "Your code is not valid!" });
     }
@@ -247,11 +246,35 @@ const updateProf = async (req, res) => {
 const updateCover = async (req, res) => {
   try {
     const { url } = req.body;
-    console.log(url)
     const updatedcover = await User.findByIdAndUpdate(req.user.id, {
       cover: url,
     });
     res.json({ updatedcover });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+const updateBio = async (req, res) => {
+  try {
+    const { intro } = req.body;
+    const updatedDetails = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        details: intro,
+      },
+      { new: true }
+    );
+   
+    res.json(updatedDetails.details);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getDetails = async (req, res) => {
+  try {
+    const { details } = await User.findById(req.user.id);
+    res.json({ details });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -269,4 +292,6 @@ export {
   getProfile,
   updateProf,
   updateCover,
+  updateBio,
+  getDetails,
 };
