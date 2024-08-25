@@ -12,7 +12,11 @@ import {
   updateProf,
   updateCover,
   updateBio,
-  getDetails,
+  addFriend,
+  cancelRequest,
+  follow,
+  unFollow,
+  acceptRequest,
 } from "../controllers/user.js";
 import { userAuth } from "../middlewares/auth.js";
 
@@ -30,5 +34,10 @@ router.get("/getProfile/:username", userAuth, getProfile);
 router.put("/updateProf", userAuth, updateProf);
 router.put("/updateCover", userAuth, updateCover);
 router.put("/updateCover/bio", userAuth, updateBio);
+router.put("/addFriend/:id", userAuth, addFriend);
+router.put("/cancelRequest/:id", userAuth, cancelRequest);
+router.put("/follow/:id", userAuth, follow);
+router.put("/unFollow/:id", userAuth, unFollow);
+router.put("/acceptRequest/:id", userAuth, acceptRequest);
 
 export default router;
