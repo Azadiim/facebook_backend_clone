@@ -17,6 +17,8 @@ import {
   follow,
   unFollow,
   acceptRequest,
+  unFriend,
+  deleteRequest,
 } from "../controllers/user.js";
 import { userAuth } from "../middlewares/auth.js";
 
@@ -39,5 +41,7 @@ router.put("/cancelRequest/:id", userAuth, cancelRequest);
 router.put("/follow/:id", userAuth, follow);
 router.put("/unFollow/:id", userAuth, unFollow);
 router.put("/acceptRequest/:id", userAuth, acceptRequest);
+router.put("/unFriend/:id", userAuth, unFriend);
+router.put("/deleteRequest/:id", userAuth, deleteRequest);
 
 export default router;
