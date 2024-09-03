@@ -220,39 +220,40 @@ const changePasswords = async (req, res) => {
 const getProfile = async (req, res) => {
   try {
     const { username } = req.params;
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
     const friendship = {
       friends: false,
       following: false,
       sentRequest: false,
       receivedRequest: false,
     };
+
     const profile = await User.findOne({ username }).select("-password");
 
     if (
-      user.friends.include(profile._id) &&
-      profile.friends.include(user._id)
+      user.friends.includes(profile._id) &&
+      profile.friends.includes(user._id)
     ) {
       friendship.friends = true;
     }
-    if (user.following.include(profile._id)) {
+
+    if (user.following.includes(profile._id)) {
       friendship.following = true;
     }
 
-    if (profile.requests.include(user._id)) {
+    if (profile.requests.includes(user._id)) {
       friendship.sentRequest = true;
     }
-    if (user.requests.include(profile._id)) {
+    if (user.requests.includes(profile._id)) {
       friendship.receivedRequest = true;
     }
-
     const posts = await Post.find({ user: profile._id })
       .populate("user")
       .sort({ createdAt: -1 });
     if (!profile) {
       return res.json({ profileExist: false });
     }
-    res.json({ ...profile.toObject(), posts, friendship });
+    res.json({ ...profile.toObject(), posts,friendship });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
