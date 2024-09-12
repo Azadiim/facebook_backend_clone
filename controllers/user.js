@@ -301,8 +301,8 @@ const addFriend = async (req, res) => {
       const sender = await User.findById(req.user.id);
       const receiver = await User.findById(req.params.id);
       if (
-        !receiver.friends.include(sender._id) &&
-        !receiver.requests.include(sender._id)
+        !receiver.friends.includes(sender._id) &&
+        !receiver.requests.includes(sender._id)
       ) {
         await receiver.updateOne({
           $push: { requests: sender._id },
@@ -337,8 +337,8 @@ const cancelRequest = async (req, res) => {
       const sender = await User.findById(req.user.id);
       const receiver = await User.findById(req.params.id);
       if (
-        !receiver.friends.include(sender._id) &&
-        receiver.requests.include(sender._id)
+        !receiver.friends.includes(sender._id) &&
+        receiver.requests.includes(sender._id)
       ) {
         await receiver.updateOne({
           $pull: { requests: sender._id },
@@ -373,8 +373,8 @@ const follow = async (req, res) => {
       const sender = await User.findById(req.user.id);
       const receiver = await User.findById(req.params.id);
       if (
-        !receiver.followers.include(sender._id) &&
-        !sender.following.include(receiver._id)
+        !receiver.followers.includes(sender._id) &&
+        !sender.following.includes(receiver._id)
       ) {
         await receiver.updateOne({
           $push: { followers: sender._id },
@@ -403,8 +403,8 @@ const unFollow = async (req, res) => {
       const sender = await User.findById(req.user.id);
       const receiver = await User.findById(req.params.id);
       if (
-        receiver.followers.include(sender._id) &&
-        sender.following.include(receiver._id)
+        receiver.followers.includes(sender._id) &&
+        sender.following.includes(receiver._id)
       ) {
         await receiver.updateOne({
           $pull: { followers: sender._id },
@@ -432,7 +432,7 @@ const acceptRequest = async (req, res) => {
     if (req.user.id !== req.params.id) {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
-      if (receiver.requests.include(sender._id)) {
+      if (receiver.requests.includes(sender._id)) {
         await receiver.update({
           $push: { friends: sender._id, followers: sender._id },
         });
@@ -464,8 +464,8 @@ const unFriend = async (req, res) => {
       const sender = await User.findById(req.user.id);
       const receiver = await User.findById(req.params.id);
       if (
-        receiver.friends.include(sender._id) &&
-        sender.friends.include(receiver._id)
+        receiver.friends.includes(sender._id) &&
+        sender.friends.includes(receiver._id)
       ) {
         await receiver.update({
           $pull: {
@@ -500,7 +500,7 @@ const deleteRequest = async (req, res) => {
     if (req.user.id !== req.params.id) {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
-      if (receiver.request.include(sender._id)) {
+      if (receiver.request.includes(sender._id)) {
         await receiver.update({
           $pull: {
             requests: sender._id,
