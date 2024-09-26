@@ -3,6 +3,7 @@ import cors from "cors";
 import useRoutes from "./routes/user.js";
 import imageRoutes from "./routes/upload.js";
 import postRoutes from "./routes/post.js";
+import reactRoutes from "./routes/react.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import fileUpload from "express-fileupload";
@@ -26,6 +27,7 @@ app.use(
 app.use("/", useRoutes);
 app.use("/", imageRoutes);
 app.use("/", postRoutes);
+app.use("/", reactRoutes);
 const PORT = process.env.PORT || 8001;
 
 // database
