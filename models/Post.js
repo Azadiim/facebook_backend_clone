@@ -25,7 +25,7 @@ const postSchema = new mongoose.Schema(
         comment: { type: String },
         image: { type: String },
         commentBy: { type: ObjectId, ref: "User" },
-        commentAt: { type: Date, default: new Date() },
+        commentAt: { type: Date, required: true },
       },
     ],
   },

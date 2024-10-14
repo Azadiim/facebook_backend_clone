@@ -247,7 +247,7 @@ const getProfile = async (req, res) => {
       friendship.receivedRequest = true;
     }
     const posts = await Post.find({ user: profile._id })
-      .populate("user")
+      .populate("user").populate('comments.commentBy', 'first_name last_name username picture commentAt')
       .sort({ createdAt: -1 });
     await profile.populate("friends", "first_name last_name username picture");
     if (!profile) {

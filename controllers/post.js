@@ -1,4 +1,6 @@
+import { cloudchannel } from "googleapis/build/src/apis/cloudchannel/index.js";
 import Post from "../models/Post.js";
+import User from "../models/User.js";
 const createPost = async (req, res) => {
   try {
     const post = await new Post(req.body).save();
@@ -10,10 +12,31 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find()
-      .populate("user", "first_name last_name gender picture username")
-      .sort({ createdAt: -1 });
-    res.status(200).json(posts);
+    const userFollowings = await User.findById(req.user.id).select("following");
+    const postOfFollowings = userFollowings.following.map((followingId) => {
+      return Post.find({ user: followingId })
+        .populate("user", "first_name last_name username picture cover")
+        .populate(
+          "comments.commentBy",
+          "first_name last_name username picture cover"
+        )
+        .sort({ createdAt: -1 })
+        .limit(10);
+    });
+    const followingPosts = await (await Promise.all(postOfFollowings)).flat();
+    const myPosts = await Post.find({ user: req.user.id })
+      .populate("user", "first_name last_name username picture cover")
+      .populate(
+        "comments.commentBy",
+        "first_name last_name username picture cover"
+      )
+      .sort({ createdAt: -1 })
+      .limit(10);
+    followingPosts.push(...[...myPosts]);
+    followingPosts.sort((a, b) => {
+      return b.createdAt - a.createdAt;
+    });
+    res.json(followingPosts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -30,6 +53,7 @@ const comment = async (req, res) => {
             comment: comment,
             image: image,
             commentBy: req.user.id,
+            commentAt: new Date(),
           },
         },
       },
