@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import React from "../models/react.js";
+import User from "../models/User.js";
 const reactPost = async (req, res) => {
   try {
     const { postId, react } = req.body;
@@ -54,10 +55,15 @@ const getReact = async (req, res) => {
     finalArray.sort((a, b) => {
       return b.count - a.count;
     });
+    const user = await User.findById(req.user.id);
+    const checkSaved = user?.savedPosts.find((x) => x.post.toString() === req.params.id);
 
-    res
-      .status(200)
-      .json({ react: finalArray, check: check?.react, total: rcs.length });
+    res.status(200).json({
+      react: finalArray,
+      check: check?.react,
+      total: rcs.length,
+      checkSaved: checkSaved ? true : false,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

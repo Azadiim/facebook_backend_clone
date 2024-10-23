@@ -66,4 +66,30 @@ const comment = async (req, res) => {
   }
 };
 
-export { createPost, getAllPosts, comment };
+const savePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const user = await User.findById(req.user.id);
+
+    const check = user?.savedPosts.find((x) => x.post.toString() === postId);
+
+    if (check) {
+      await User.findByIdAndUpdate(req.user.id, {
+        $pull: {
+          savedPosts: { _id: check._id },
+        },
+      });
+    } else {
+      await User.findByIdAndUpdate(req.user.id, {
+        $push: {
+          savedPosts: { post: postId, savedAt: new Date() },
+        },
+      });
+    }
+    res.status(200).json(check);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export { createPost, getAllPosts, comment, savePost };
