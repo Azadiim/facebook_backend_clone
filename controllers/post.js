@@ -92,4 +92,14 @@ const savePost = async (req, res) => {
   }
 };
 
-export { createPost, getAllPosts, comment, savePost };
+const deletePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const deletedPost = await Post.findByIdAndRemove(postId);
+    res.status(200).json({ status: "ok" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export { createPost, getAllPosts, comment, savePost, deletePost };

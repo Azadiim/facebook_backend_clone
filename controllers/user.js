@@ -247,7 +247,11 @@ const getProfile = async (req, res) => {
       friendship.receivedRequest = true;
     }
     const posts = await Post.find({ user: profile._id })
-      .populate("user").populate('comments.commentBy', 'first_name last_name username picture commentAt')
+      .populate("user")
+      .populate(
+        "comments.commentBy",
+        "first_name last_name username picture commentAt"
+      )
       .sort({ createdAt: -1 });
     await profile.populate("friends", "first_name last_name username picture");
     if (!profile) {
@@ -527,6 +531,49 @@ const deleteRequest = async (req, res) => {
   }
 };
 
+const search = async (req, res) => {
+  try {
+    const searchTerm = req.params.searchTerm;
+    const result = await User.find({
+      $text: {
+        $search: searchTerm,
+      },
+    }).select("first_name last_name username picture");
+    res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const addToSearchHistory = async (req, res) => {
+  try {
+    const { searchUser } = req.body;
+    const search = {
+      user: searchUser,
+      createdAt: new Date(),
+    };
+    const user = await User.findById(req.user.id);
+    const check = user.search.find((x) => x.user.toString() === searchUser);
+    if (check) {
+      await User.updateOne(
+        { _id: req.user.id, "search._id": check._id },
+        {
+          $set: { "search.$.createdAt": new Date() },
+        }
+      );
+    } else {
+      // user.search.push({ user: searchUser, date: new Date() });
+      await User.findByIdAndUpdate(req.user.id, {
+        $push: {
+          search,
+        },
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export {
   register,
   activateAccount,
@@ -547,4 +594,6 @@ export {
   acceptRequest,
   unFriend,
   deleteRequest,
+  search,
+  addToSearchHistory,
 };

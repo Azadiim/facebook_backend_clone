@@ -19,6 +19,8 @@ import {
   acceptRequest,
   unFriend,
   deleteRequest,
+  search,
+  addToSearchHistory,
 } from "../controllers/user.js";
 import { userAuth } from "../middlewares/auth.js";
 
@@ -43,5 +45,7 @@ router.put("/unFollow/:id", userAuth, unFollow);
 router.put("/acceptRequest/:id", userAuth, acceptRequest);
 router.put("/unFriend/:id", userAuth, unFriend);
 router.put("/deleteRequest/:id", userAuth, deleteRequest);
+router.post("/search/:searchTerm", userAuth, search);
+router.post("/addToSearchHistory", userAuth, addToSearchHistory);
 
 export default router;
