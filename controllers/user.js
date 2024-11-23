@@ -2,6 +2,7 @@ import { codeGenerator } from "../helpers/codeGenerator.js";
 import sendVerificationEmail from "../helpers/mailer.js";
 import sendConfEmail from "../helpers/nodemailder.js";
 import generateToken from "../helpers/token.js";
+import mongoose from "mongoose";
 import {
   validateLength,
   validateEmail,
@@ -553,7 +554,7 @@ const addToSearchHistory = async (req, res) => {
       createdAt: new Date(),
     };
     const user = await User.findById(req.user.id);
-    const check = user.search.find((x) => x.user.toString() === searchUser);
+    const check = user.search.find((x) => x.user === searchUser);
     if (check) {
       await User.updateOne(
         { _id: req.user.id, "search._id": check._id },
@@ -573,6 +574,48 @@ const addToSearchHistory = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+const deleteFromSearchHistory = async (req, res) => {
+  try {
+    const { searchUser } = req.body;
+    await User.updateOne(
+      { _id: req.user.id },
+      { $pull: { search: { user: searchUser } } }
+    );
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getSearchHistory = async (req, res) => {
+  try {
+    const result = await User.findById(req.user.id)
+      .select("search")
+      .populate("search.user", "first_name last_name username picture");
+    console.log(result);
+    res.json(result.search);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getFriendsInfo = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select("friends requests")
+      .populate("friends", "first_name last_name username picture")
+      .populate("requests", "first_name last_name username picture");
+
+    const sentRequests = await User.find({
+      requests: new mongoose.Types.ObjectId(req.user.id),
+    }).select("first_name last_name username picture");
+    res.json({ friends: user.friends, requests: user.requests, sentRequests });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
 
 export {
   register,
@@ -596,4 +639,8 @@ export {
   deleteRequest,
   search,
   addToSearchHistory,
+  getSearchHistory,
+  deleteFromSearchHistory,
+  getFriendsInfo,
+
 };
